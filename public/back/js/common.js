@@ -1,7 +1,6 @@
 
 
 
-
 // 测试进度条：
 // NProgress.start()  //开启进度条
 
@@ -36,4 +35,56 @@ $(document).ajaxStop(function(){
         //当全部ajax请求完成时，关闭进度条
     NProgress.done();
     }, 500)
+})
+
+// 等待页面dom结构的加载后执行
+$(function(){
+
+    // 注册事件完成公共功能：
+    // 功能1：左侧二级导航切换效果:
+    $('.lt_aside .category').click(function(){
+        $('.lt_aside .child').stop().slideToggle()
+    })
+
+
+    // 功能2：左侧菜单切换效果
+    $('.icon_left').click(function(){
+        // console.log(1);
+        $('.lt_aside').toggleClass('hidemenu')
+        $('.lt_main').toggleClass('hidemenu')
+        $('.lt_topbar').toggleClass('hidemenu')
+    })
+    // 功能3：退出功能
+    // 给右侧按钮，添加点击事件，让模态框显示
+    $('.icon_right').click(function(){
+        // alert(1);
+        // 让模态框显示：modal('show')    隐藏：modal('hide)
+        $('#logoutModal').modal('show')
+    })
+
+
+    // 退出的两种方式：
+    // 1，发ajax给后台，销毁当前用户的登录状态，实现退出 （推荐）
+    // 2，清除浏览器缓存，将cookie清空，本地存储的 sessionId 也没了
+
+    // 给退出按钮，注册点击事件，需要在退出时，销毁当前用户的登录状态
+    $('#logoutBtn').click(function(){
+
+        // 发送ajax请求，让后端销毁当前用户的登录状态
+        $.ajax({
+            url:'/employee/employeeLogout',
+            type:'GET',
+            dataType:'json',
+            success:function(info){
+                // console.log(info)
+                if(info.success){
+                    // 销毁登录状态：
+                    location.href = 'login.html';
+                }
+            }
+        })
+    })
+
+
+
 })
